@@ -1,5 +1,7 @@
 package com.kdx.example.authen.web;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,6 +20,9 @@ import java.util.Map;
 @RequestMapping("/api/login")
 public class LoginController {
 
+    @Autowired
+    private RedisTemplate redisTemplate;
+
     /**
      * 登录
      * @param params {"username":"","password":""}
@@ -28,6 +33,7 @@ public class LoginController {
         Map res = new HashMap();
         System.out.println(params.toString());
         res.put("kdx","cccccc");
+        redisTemplate.opsForValue().set("kdx",res.get("name"));
         return params;
     }
 
