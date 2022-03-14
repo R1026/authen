@@ -10,7 +10,8 @@ import lombok.Data;
 public enum ResultCode {
 
     OPERATION_SUCCEEDED(200,"操作成功！"),
-    OPERATION_FAILED(0,"操作失败！");
+    OPERATION_FAILED(0,"操作失败！"),
+    INVALID_TOKEN(0,"INVALID TOKEN.");
 
 
     private Integer code;

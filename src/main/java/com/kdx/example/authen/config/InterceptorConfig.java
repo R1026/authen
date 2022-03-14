@@ -32,7 +32,7 @@ public class InterceptorConfig implements WebMvcConfigurer{
     public void addInterceptors(InterceptorRegistry registry) {
         String ignorelogin = environment.getProperty("ignorelogin", "");
         List<String> ignorelogins = Arrays.asList(ignorelogin.split(","));
-        log.info("加载拦截器配置-忽略拦截路径：【{}】",ignorelogin);
+        log.info("======>>>加载拦截器配置-忽略拦截路径：【{}】",ignorelogin);
         registry.addInterceptor(authenInterceptor)
                 .addPathPatterns("/**").excludePathPatterns(ignorelogins);
     }

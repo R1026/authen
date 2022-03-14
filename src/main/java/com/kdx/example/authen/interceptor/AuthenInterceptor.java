@@ -2,19 +2,24 @@ package com.kdx.example.authen.interceptor;
 
 import com.alibaba.fastjson.JSONObject;
 import com.kdx.example.authen.annotations.AuthenCheck;
+import com.kdx.example.authen.enums.ResultCode;
 import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.lang.reflect.Method;
 
 /**
  * 自定义拦截器
@@ -30,29 +35,39 @@ public class AuthenInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 
-        JSONObject resultInfo = new JSONObject();
-        resultInfo.put("success",false);
-        resultInfo.put("code",0);
-        resultInfo.put("timestamp",System.currentTimeMillis());
+        //是否映射到方法
+        if (!(handler instanceof HandlerMethod)){
+            return true;
+        }
 
         //1.是否忽略校验
-        if (handleAuthenCheck(request,handler)){
+        if (!handleAuthenCheck(request,handler)){
             return true;
         }
 
         //2.校验请求头token。
         String access_token = request.getHeader("Authorization");
-        log.info("请求方法：【{}】，请求头Token:【{}】,请求路径：【{}】",request.getMethod(),access_token,request.getRequestURI());
+        log.info("======>>>请求方法：【{}】，Authorization:【{}】,请求路径：【{}】",request.getMethod(),access_token,request.getRequestURI());
+
+        if (StringUtils.isEmpty(access_token)){
+            JSONObject resultInfo = new JSONObject();
+            resultInfo.put("timestamp",System.currentTimeMillis());
+            resultInfo.put("success",false);
+            resultInfo.put("code", ResultCode.INVALID_TOKEN.getCode());
+            resultInfo.put("errormsg",ResultCode.INVALID_TOKEN.getMsg());
+
+            response.reset();
+            response.setStatus(401);
+            response.setCharacterEncoding(CharsetUtil.UTF_8.toString());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.getWriter().write(resultInfo.toString());
+            response.getWriter().flush();
+            return false;
+        }
 
 
-        resultInfo.put("errormsg","未授权访问!");
-        response.reset();
-        response.setCharacterEncoding(CharsetUtil.UTF_8.toString());
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.getWriter().write(resultInfo.toString());
-        response.getWriter().flush();
 
-        return false;
+        return true;
     }
 
 
@@ -67,17 +82,14 @@ public class AuthenInterceptor implements HandlerInterceptor {
     }
 
     private boolean handleAuthenCheck(HttpServletRequest request, Object handler) {
-        if (handler instanceof HandlerMethod){
-            HandlerMethod handlerMethod = (HandlerMethod)handler;
-            AuthenCheck authenCheck = handlerMethod.getMethod().getAnnotation(AuthenCheck.class);
-            if (ObjectUtils.isEmpty(authenCheck)){
-                return true;
-            }
+        HandlerMethod handlerMethod = (HandlerMethod)handler;
+        Method method = handlerMethod.getMethod();
+        if (method.isAnnotationPresent(AuthenCheck.class)){
+            AuthenCheck authenCheck = method.getAnnotation(AuthenCheck.class);
             boolean required = authenCheck.required();
             return required;
         }
         return true;
-
     }
 
 }

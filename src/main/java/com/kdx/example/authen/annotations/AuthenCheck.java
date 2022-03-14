@@ -3,7 +3,7 @@ package com.kdx.example.authen.annotations;
 import java.lang.annotation.*;
 
 /**
- * @Desc --自定义权限校验注解
+ * @Desc --自定义权限校验注解:是否需要校验token。
  * @Author kedongxing
  * @Version 1.0.0
  * @Date 2021/11/28

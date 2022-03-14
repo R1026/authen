@@ -29,7 +29,6 @@ public class AppInfoController {
         return appInfo;
     }
 
-    @AuthenCheck(required = false)
     @GetMapping("/qeuryAppDetail")
     public AppInfo queryAppDetail(@RequestParam String id){
         return service.queryAppDetail(id);
