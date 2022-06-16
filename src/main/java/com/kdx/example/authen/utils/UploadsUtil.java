@@ -1,7 +1,9 @@
 package com.kdx.example.authen.utils;
 
 import com.kdx.example.authen.entity.DxFile;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.env.Environment;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,14 +20,14 @@ import java.util.List;
  */
 public class UploadsUtil<T> {
 
-    @Value("${com.kdx.filepath:null}")
-    public static String file_bashurl;
 
     public static String UPLOAD_PATH     = "UPLOAD";
     public static String DOWNLOAD_PATH   = "DOWNLOAD";
 
-    public static List<DxFile> uploads(MultipartFile[] files) throws IOException{
-        String uploadDir = getUploadDir();
+    public static List<DxFile> uploads(String bashpath,MultipartFile[] files) throws IOException{
+        //String uploadDir = getUploadDir();
+        File uDir = FileUtil.getUploadDir(bashpath);
+        String uploadDir = uDir.getAbsolutePath();
         List<DxFile> list = new ArrayList<>();
         for (MultipartFile file : files) {
             String filename = file.getOriginalFilename();
@@ -46,7 +48,7 @@ public class UploadsUtil<T> {
         return list;
     }
 
-    public static String getUploadDir(){
+    /*public static String getUploadDir(){
         file_bashurl = StringUtils.isEmpty(file_bashurl) ? System.getProperty("user.dir") : file_bashurl;
         String uploadDir_ = file_bashurl + File.separator + UPLOAD_PATH;
         File u = new File(uploadDir_);
@@ -59,6 +61,6 @@ public class UploadsUtil<T> {
         file_bashurl = StringUtils.isEmpty(file_bashurl) ? System.getProperty("user.dir") : file_bashurl;
         String downloadDir_ = file_bashurl + File.separator + DOWNLOAD_PATH;
         return downloadDir_;
-    }
+    }*/
 
 }

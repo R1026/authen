@@ -1,18 +1,19 @@
 package com.kdx.example.authen.web;
 
+import com.kdx.example.authen.channel.AbstractChannel;
+import com.kdx.example.authen.channel.Handler1;
+import com.kdx.example.authen.channel.Handler2;
 import com.kdx.example.authen.task.AsyncTask;
-import com.sun.deploy.net.HttpUtils;
-import io.netty.handler.codec.http.HttpUtil;
-import lombok.SneakyThrows;
+import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * @Desc --
@@ -20,6 +21,7 @@ import java.util.Map;
  * @Version 1.0.0
  * @Date 2021/11/28
  */
+@Slf4j
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
@@ -34,7 +36,6 @@ public class LoginController {
     @PostMapping("/addlogin")
     public Map addLogin(@RequestBody Map<String,String> params){
         Map res = new HashMap();
-
         return res;
     }
 
@@ -60,6 +61,37 @@ public class LoginController {
             System.out.println("------>");
         }catch (Exception e){}
         return map;
+    }
+
+    /*public static void main(String[] args) {
+        System.out.println("主线程开始执行。");
+
+        *//*CompletableFuture.runAsync(()->{
+            for (int i = 1; i <= 500; i++) {
+                System.out.println("子线程执行("+ Thread.currentThread().getName() +")：" + i);
+            }
+        });*//*
+
+        for (int i = 1; i <= 500; i++) {
+            final int ii = i;
+            CompletableFuture.runAsync(()->{
+                System.out.println("子线程执行("+ Thread.currentThread().getName() +")：" + ii);
+            });
+        }
+
+        try {
+            Thread.sleep(8000);
+        }catch (InterruptedException e){
+            e.printStackTrace();
+        }
+        System.out.println("主线程结束");
+    }*/
+
+
+    public static void main(String[] args) {
+        /*AbstractChannel ac = new AbstractChannel();
+        ac.setNextHandler(new Handler1()).setNextHandler(new Handler2());
+        ac.excute("hello .my name is kedongxing");*/
     }
 
 
