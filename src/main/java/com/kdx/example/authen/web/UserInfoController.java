@@ -1,14 +1,11 @@
 package com.kdx.example.authen.web;
 
+import com.kdx.example.authen.annotations.ApiLimit;
 import com.kdx.example.authen.annotations.AuthenCheck;
-import com.kdx.example.authen.common.RRExcection;
 import com.kdx.example.authen.entity.UserInfo;
 import com.kdx.example.authen.service.IUserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @Desc --用户信息
@@ -39,17 +36,19 @@ public class UserInfoController {
      * @param username
      * @return
      */
+    @ApiLimit(count = 3)
     @AuthenCheck(required = false)
     @GetMapping("/checkUsername")
-    public Map checkUsername(@RequestParam String username){
-        Map res = new HashMap();
+    public Integer checkUsername(@RequestParam String username){
+        //Map res = new HashMap();
         boolean flag = service.checkUsername(username);
         if (flag){
-            res.put("username",username);
+            //res.put("username",username);
+            return 0;
         }else {
-            throw new RRExcection(200,"很遗憾,此账号已被注册。","很遗憾,此账号已被注册。");
+            //throw new RRExcection(200,"很遗憾,此账号已被注册。","很遗憾,此账号已被注册。");
+            return 1;
         }
-        return res;
     }
 
 }

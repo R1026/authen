@@ -1,19 +1,18 @@
 package com.kdx.example.authen.web;
 
-import com.kdx.example.authen.channel.AbstractChannel;
-import com.kdx.example.authen.channel.Handler1;
-import com.kdx.example.authen.channel.Handler2;
+import com.kdx.example.authen.common.RRExcection;
+import com.kdx.example.authen.service.IUserInfoService;
 import com.kdx.example.authen.task.AsyncTask;
-import com.sun.org.apache.xerces.internal.dom.PSVIAttrNSImpl;
+import io.swagger.annotations.Api;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * @Desc --
@@ -21,12 +20,14 @@ import java.util.concurrent.CompletableFuture;
  * @Version 1.0.0
  * @Date 2021/11/28
  */
+@Api(value = "LoginController",tags = "登录")
 @Slf4j
 @RestController
 @RequestMapping("/api/login")
 public class LoginController {
 
-
+    @Autowired
+    private IUserInfoService userInfoService;
 
     /**
      * 登录
@@ -35,8 +36,25 @@ public class LoginController {
      */
     @PostMapping("/addlogin")
     public Map addLogin(@RequestBody Map<String,String> params){
-        Map res = new HashMap();
-        return res;
+        //Map res = new HashMap();
+        String type = params.get("type");
+        String username = params.get("username");
+        String password = params.get("password");
+        String phone = params.get("phone");
+        String vcode = params.get("vcode");
+        if ("1".equals(type)){
+            if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)){
+                throw new RRExcection(200,"用户名或密码不为空","用户名或密码不为空");
+            }
+            //return userInfoService.loginByUsername(username,password);
+        }
+        if ("2".equals(type)){
+            if (StringUtils.isEmpty(phone) || StringUtils.isEmpty(vcode)){
+                throw new RRExcection(200,"手机号或验证码不为空","手机号或验证码不为空");
+            }
+        }
+        //return res;
+        throw new RRExcection(300,"无效操作","无效操作");
     }
 
     @Autowired

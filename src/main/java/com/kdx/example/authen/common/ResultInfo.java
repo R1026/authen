@@ -1,4 +1,4 @@
-package com.kdx.example.authen.utils;
+package com.kdx.example.authen.common;
 
 import com.kdx.example.authen.enums.ResultCode;
 import lombok.Data;

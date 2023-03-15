@@ -1,7 +1,5 @@
 package com.kdx.example.authen.common;
 
-import com.kdx.example.authen.enums.ResultCode;
-import com.kdx.example.authen.utils.ResultInfo;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +10,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
-import java.time.LocalDateTime;
 import java.util.Date;
 
 /**
@@ -27,7 +24,7 @@ public class RRExcectionHandle {
 
     @ExceptionHandler(RRExcection.class)
     public ResultInfo excectionHandle(RRExcection e){
-        log.error("======>>>接口调用异常({})：",System.currentTimeMillis(),e);
+        //log.error("======>>>接口调用异常({})：",System.currentTimeMillis(),e);
         ResultInfo info = new ResultInfo();
         info.setMsg(e.getMsg());
         info.setCode(e.getCode());

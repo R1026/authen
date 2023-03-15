@@ -1,18 +1,10 @@
 package com.kdx.example.authen.interceptor;
 
-import com.alibaba.fastjson.JSONObject;
 import com.kdx.example.authen.annotations.AuthenCheck;
-import com.kdx.example.authen.enums.ResultCode;
-import io.netty.util.CharsetUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.annotation.Order;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
-import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
@@ -49,7 +41,7 @@ public class AuthenInterceptor implements HandlerInterceptor {
         String access_token = request.getHeader("Authorization");
         log.info("======>>>请求方法：【{}】，Authorization:【{}】,请求路径：【{}】",request.getMethod(),access_token,request.getRequestURI());
 
-        if (StringUtils.isEmpty(access_token)){
+        /*if (StringUtils.isEmpty(access_token)){
             JSONObject resultInfo = new JSONObject();
             resultInfo.put("timestamp",System.currentTimeMillis());
             resultInfo.put("success",false);
@@ -63,7 +55,7 @@ public class AuthenInterceptor implements HandlerInterceptor {
             response.getWriter().write(resultInfo.toString());
             response.getWriter().flush();
             return false;
-        }
+        }*/
 
 
 

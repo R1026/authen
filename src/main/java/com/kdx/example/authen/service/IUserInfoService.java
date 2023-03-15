@@ -2,8 +2,6 @@ package com.kdx.example.authen.service;
 
 import com.kdx.example.authen.entity.UserInfo;
 
-import java.util.Map;
-
 /**
  * @Desc --
  * @Author kedongxing
@@ -15,4 +13,6 @@ public interface IUserInfoService {
     UserInfo register(UserInfo userInfo);
 
     boolean checkUsername(String username);
+
+    //Map loginByUsername(String username, String password);
 }
