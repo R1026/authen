@@ -4,6 +4,7 @@ import org.apache.commons.lang3.time.DateFormatUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -36,7 +37,7 @@ public class RRExcectionHandle {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
     public ResultInfo noFoundHandle(NoHandlerFoundException e){
-        log.error("======>>>接口调用异常({})：",System.currentTimeMillis(),e);
+        log.error("==>>接口调用异常({})：",System.currentTimeMillis(),e);
         ResultInfo info = new ResultInfo();
         info.setMsg(HttpStatus.NOT_FOUND.getReasonPhrase());
         info.setCode(HttpStatus.NOT_FOUND.value());
@@ -48,7 +49,7 @@ public class RRExcectionHandle {
     @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResultInfo notSupporteHandle(HttpRequestMethodNotSupportedException e){
-        log.error("======>>>接口调用异常({})：",System.currentTimeMillis(),e);
+        log.error("==>>接口调用异常({})：",System.currentTimeMillis(),e);
         ResultInfo info = new ResultInfo();
         info.setMsg(HttpStatus.METHOD_NOT_ALLOWED.getReasonPhrase());
         info.setCode(HttpStatus.METHOD_NOT_ALLOWED.value());
@@ -73,6 +74,15 @@ public class RRExcectionHandle {
         return info;
     }
 
-
+    @ExceptionHandler(OAuth2Exception.class)
+    public ResultInfo oAuth2ExceptionHandl(OAuth2Exception e){
+        log.error("==>>接口调用异常({})：",System.currentTimeMillis(),e);
+        ResultInfo info = new ResultInfo();
+        info.setMsg(e.getMessage());
+        info.setCode(e.getHttpErrorCode());
+        info.setErrormsg(e.getMessage());
+        info.setSuccess(Boolean.FALSE);
+        return info;
+    }
 
 }

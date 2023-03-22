@@ -39,7 +39,7 @@ public class AuthenInterceptor implements HandlerInterceptor {
 
         //2.校验请求头token。
         String access_token = request.getHeader("Authorization");
-        log.info("======>>>请求方法：【{}】，Authorization:【{}】,请求路径：【{}】",request.getMethod(),access_token,request.getRequestURI());
+        log.info("==>>请求方法：[{}]，Authorization:[{}],请求路径：[{}]",request.getMethod(),access_token,request.getRequestURI());
 
         /*if (StringUtils.isEmpty(access_token)){
             JSONObject resultInfo = new JSONObject();
